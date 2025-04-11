@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube Clone</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <style>
+        :root{
+            --color-red: #FF0000; /* YouTube Red */
+            --color-dark: #878080e6; /* Dark Mode Background */
+        }
+        .color-red{
+            color: var(--color-red) !important;
+        }
+        .search-btn {
+            border-radius: 0 20px 20px 0 !important;
+            background-color: #f8f9fa !important;
+            border-left: none !important;
+        }
+        .search-input {
+            border-radius: 20px 0 0 20px !important;
+            border-right: none !important;
+        }
+        .mic-btn {
+            border-radius: 50% !important;
+        }
+        .navbar {
+            padding: 0.5rem 1rem !important;
+        }
+        .logo {
+            height: 30px;
+        }
+        @media (max-width: 768px) {
+            .search-container {
+                order: 3;
+                width: 100%;
+                margin-top: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-md navbar-light bg-white sticky-top shadow-sm">
+        <div class="container-fluid">
+            <!-- Left side: Logo and menu icon -->
+            <div class="d-flex align-items-center">
+                <button class="btn btn-light text-dark  d-md-block rounded-circle me-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions" aria-controls="offcanvasWithBothOptions" >
+                    <i class="bi bi-list fs-5"></i>
+                </button>
+                <a class="navbar-brand me-0 me-md-2" href="#">
+                    <i class="bi bi-youtube color-red"></i>
+                    <span class="d-md-inline d-lg-inline">YouTube</span>
+                </a>
+            </div>
+
+            <!-- Middle: Search bar -->
+            <div class="search-container d-flex justify-content-center flex-grow-1 mx-2 mx-md-4">
+                <div class="input-group" style="max-width: 600px;">
+                    <input type="text" class="form-control search-input px-5" placeholder="Search">
+                    <button class="btn btn-outline-dark search-btn" type="button">
+                        <i class="bi bi-search"></i>
+                    </button>
+                    <button class="btn btn-light rounded-circle ms-2 mic-btn" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                        <i class="bi bi-mic"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Right side: Icons -->
+            <div class="d-flex align-items-center">
+
+                <div class="dropdown">
+                    <button class="btn dropdown-toggle btn-light text-dark d-md-flex align-items-center me-2" 
+                            style="border-radius: 30px; padding: 3px 10px;" type="button" 
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="bi bi-plus fs-5 me-1"></i>
+                        <span>Create</span>
+                    </button>
+                    <ul class="dropdown-menu" style="min-width: 200px;">
+                        <li>
+                            <a class="dropdown-item d-flex align-items-center" href="#">
+                                <i class="bi bi-upload fs-5 me-3"></i>
+                                <div>
+                                    <div>Upload video</div>
+                                    <small class="text-muted">Share your video</small>
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item d-flex align-items-center" href="#">
+                                <i class="bi bi-broadcast fs-5 me-3"></i>
+                                <div>
+                                    <div>Go live</div>
+                                    <small class="text-muted">Stream to your audience</small>
+                                </div>
+                            </a>
+                        </li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li>
+                            <a class="dropdown-item d-flex align-items-center" href="#">
+                                <i class="bi bi-collection-play fs-5 me-3"></i>
+                                <div>
+                                    <div>Create post</div>
+                                    <small class="text-muted">Share text, images or polls</small>
+                                </div>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <button class="btn btn-light text-dark d-md-block rounded-circle me-2" type="button">
+                    <i class="bi bi-camera-video fs-5"></i>
+                </button>
+                <button class="btn btn-light text-dark  d-md-block rounded-circle me-2" type="button">
+                    <i class="bi bi-grid-3x3-gap fs-5"></i>
+                </button>
+                <button class="btn btn-light text-dark  d-md-block rounded-circle me-2" type="button">
+                    <i class="bi bi-bell fs-5"></i>
+                </button>
+    
+                <!--  -->
+                <div class="dropdown ms-3">
+                    <style>
+                        .profile-modal {
+                            width: 300px;
+                            max-height: 70vh; /* 70% of viewport height */
+                            border-radius: 12px;
+                            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+                            border: none;
+                            margin: 0;
+                            position: absolute;
+                            right: 10px;
+                            top: 50px;
+                            z-index: 1000;
+                            overflow-y: auto; /* Enable vertical scrolling */
+                            padding: 0; /* Remove default padding */
+                        }
+                        .profile-header {
+                            padding: 16px;
+                            border-bottom: 1px solid #e0e0e0;
+                            position: sticky;
+                            top: 0;
+                            background: white;
+                            z-index: 1;
+                        }
+                        .profile-item {
+                            padding: 12px 16px;
+                            display: flex;
+                            align-items: center;
+                            cursor: pointer;
+                        }
+                        .profile-item:hover {
+                            background-color: #f5f5f5;
+                        }
+                        .profile-item i {
+                            margin-right: 16px;
+                            width: 24px;
+                            text-align: center;
+                        }
+                        .profile-divider {
+                            margin: 8px 0;
+                            border-top: 1px solid #e0e0e0;
+                        }
+                        .profile-account {
+                            font-weight: 500;
+                            font-size: 16px;
+                        }
+                        .profile-email {
+                            font-size: 14px;
+                            color: #606060;
+                        }
+                        .profile-btn {
+                            border: none;
+                            background: none;
+                            padding: 0;
+                        }
+                        /* Remove Bootstrap's default dropdown padding */
+                        .profile-dropdown {
+                            padding: 0;
+                        }
+                        /* Custom scrollbar */
+                        .profile-modal::-webkit-scrollbar {
+                            width: 6px;
+                        }
+                        .profile-modal::-webkit-scrollbar-track {
+                            background: #f1f1f1;
+                            border-radius: 0 12px 12px 0;
+                        }
+                        .profile-modal::-webkit-scrollbar-thumb {
+                            background: #888;
+                            border-radius: 3px;
+                        }
+                        .profile-modal::-webkit-scrollbar-thumb:hover {
+                            background: #555;
+                        }
+                    </style>
+                
+                    <button class="btn p-0 border-0" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="bi bi-person-circle fs-5"></i>
+                    </button>
+                    
+                    <ul class="dropdown-menu dropdown-menu-end profile-dropdown mt-2 profile-modal">
+                        <!-- Header with account info -->
+                        <li class="profile-header">
+                            <div class="d-flex align-items-center">
+                                <i class="bi bi-person-circle fs-5 me-3"></i>
+                                <div>
+                                    <div class="profile-account">RAPHAEL RANDRIANANTO...</div>
+                                    <div class="profile-email">mizaraphaelpro@gmail.com</div>
+                                </div>
+                            </div>
+                        </li>
+                        
+                        <!-- Main options -->
+                        <li><a class="dropdown-item profile-item" href="#">
+                            <i class="bi bi-person-plus"></i>
+                            <span>Create a channel</span>
+                        </a></li>
+                        
+                        <li><hr class="dropdown-divider profile-divider"></li>
+                        
+                        <li><a class="dropdown-item profile-item" href="#">
+                            <i class="bi bi-person-circle"></i>
+                            <span>Google Account</span>
+                        </a></li>
+                        <li><a class="dropdown-item profile-item" href="#">
+                            <i class="bi bi-arrow-left-right"></i>
+                            <span>Switch account</span>
+                        </a></li>
+                        <li><a class="dropdown-item profile-item" href="#">
+                            <i class="bi bi-box-arrow-right"></i>
+                            <span>Sign out</span>
+                        </a></li>
+                        
+                        <li><hr class="dropdown-divider profile-divider"></li>
+                        
+                        <li><a class="dropdown-item profile-item" href="#">
+                            <i class="bi bi-play-circle"></i>
+                            <span>YouTube Studio</span>
+                        </a></li>
+                        <li><a class="dropdown-item profile-item" href="#">
+                            <i class="bi bi-credit-card"></i>
+                            <span>Purchases and memberships</span>
+                        </a></li>
+                        <li><a class="dropdown-item profile-item" href="#">
+                            <i class="bi bi-database"></i>
+                            <span>Your data in YouTube</span>
+                        </a></li>
+                        
+                        <li><hr class="dropdown-divider profile-divider"></li>
+                        
+                        <li><a class="dropdown-item profile-item" href="#">
+                            <i class="bi bi-brightness-high"></i>
+                            <span>Appearance: Device theme</span>
+                        </a></li>
+                        <li><a class="dropdown-item profile-item" href="#">
+                            <i class="bi bi-translate"></i>
+                            <span>Language: English</span>
+                        </a></li>
+                        <li><a class="dropdown-item profile-item" href="#">
+                            <i class="bi bi-shield-lock"></i>
+                            <span>Restricted Mode: Off</span>
+                        </a></li>
+                        <li><a class="dropdown-item profile-item" href="#">
+                            <i class="bi bi-geo-alt"></i>
+                            <span>Location: India</span>
+                        </a></li>
+                        
+                        <li><hr class="dropdown-divider profile-divider"></li>
+                        
+                        <li><a class="dropdown-item profile-item" href="#">
+                            <i class="bi bi-keyboard"></i>
+                            <span>Keyboard shortcuts</span>
+                        </a></li>
+                        <li><a class="dropdown-item profile-item" href="#">
+                            <i class="bi bi-gear"></i>
+                            <span>Settings</span>
+                        </a></li>
+                        <li><a class="dropdown-item profile-item" href="#">
+                            <i class="bi bi-question-circle"></i>
+                            <span>Help</span>
+                        </a></li>
+                        
+                        <li><a class="dropdown-item profile-item" href="#">
+                            <i class="bi bi-chat-left-text"></i>
+                            <span>Send feedback</span>
+                        </a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <section class="offcanva-left">
+        <div class="offcanvas offcanvas-start" data-bs-scroll="true" tabindex="-1" id="offcanvasWithBothOptions" aria-labelledby="offcanvasWithBothOptionsLabel"
+            style="width: 300px;"
+        >
+            <div class="offcanvas-header">
+              <h5 class="offcanvas-title" id="offcanvasWithBothOptionsLabel">Backdrop with scrolling</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body">
+              <p>Try scrolling the rest of the page to see this option in action.</p>
+            </div>
+          </div>
+    </section>
+    <section class="modal-mic">
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">Search with your voice</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body d-flex justify-content-center align-items-center" style="min-height: 200px;">
+                        <div class="text-center">
+                            <!-- Microphone component -->
+                            <div class="position-relative">
+                                <div class="rounded-circle bg-danger d-flex justify-content-center align-items-center" 
+                                    style="width: 80px; height: 80px; cursor: pointer;" id="microphoneBtn">
+                                    <i class="bi bi-mic-fill text-white fs-3"></i>
+                                </div>    
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
